@@ -8,15 +8,14 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 
-import com.google.android.gms.ads.identifier.AdvertisingIdClient;
-import com.google.android.gms.ads.identifier.AdvertisingIdClient.Info;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Logger;
+import com.google.android.gms.analytics.Tracker;
 
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by cbrevik on 22/11/15.
- */
 public class GoogleAnalyticsBridge extends ReactContextBaseJavaModule{
 
     public GoogleAnalyticsBridge(ReactApplicationContext reactContext) {
@@ -28,67 +27,37 @@ public class GoogleAnalyticsBridge extends ReactContextBaseJavaModule{
         return "GoogleAnalyticsBridge";
     }
 
-    /**
-     * Return the advertising info
-     * @return
-     */
-    private Info getAdvertisementInfo(){
-      try{
-        return AdvertisingIdClient.getAdvertisingIdInfo((Context)getReactApplicationContext());
-      }catch(Exception e){
-        return null;
-      }
+    HashMap<string, Tracker> mTrackers = new HashMap<string, Tracker>();
+
+    synchronized Tracker getTracker(string trackerId) {
+       if (!mTrackers.containsKey(trackerId)) {
+           GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+           Tracker t = analytics.newTracker(trackerId);
+           t.setAnonymizeIp(true);
+           mTrackers.put(trackerId, t);
+       }
+       return mTrackers.get(trackerId);
     }
 
-    /**
-     * Export to Javascript the variable language containing the current language
-     * @return
-     */
     @Override
     public Map<String, Object> getConstants() {
         final Map<String, Object> constants = new HashMap<>();
         return constants;
     }
 
-    /**
-     * Export a method callable from javascript that returns the current language
-     * @param callback
-     */
     @ReactMethod
-    public void getAdvertisingId(Callback callback){
-        Info info = getAdvertisementInfo();
-        String id = null;
-        if (info != null)
+    public void getAdvertisingId(string trackerId, string eventCategory, string eventAction, Callback callback){
+        Tracker tracker = getTracker(trackerId);
+        bool tracked = false;
+        if (tracker != null)
         {
-          id = info.getId();
-          System.out.println("The advertising id is " + id);
-        }
-        else
-        {
-          System.out.println("Unable to retrieve advertising id. Is Play Services installed?");
-        }
-
-        callback.invoke(null, id);
-    }
-
-    /**
-     * Export a method callable from javascript that returns the current language
-     * @param callback
-     */
-    @ReactMethod
-    public void getAdvertisingTrackingEnabled(Callback callback){
-        Info info = getAdvertisementInfo();
-        boolean limited = false;
-        if (info != null)
-        {
-          limited = info.isLimitAdTrackingEnabled();
-          System.out.println("Limited tracking is enabled " + limited);
-        }
-        else
-        {
-          System.out.println("Unable to retrieve limited tracking value. Is Play Services installed?");
+          tracker.send(new HitBuilders.EventBuilder()
+                .setCategory(getString(categoryId))
+                .setAction(getString(actionId))
+                .build());
+          tracked = true;
         }
 
-        callback.invoke(null, limited);
+        callback.invoke(tracked);
     }
 }

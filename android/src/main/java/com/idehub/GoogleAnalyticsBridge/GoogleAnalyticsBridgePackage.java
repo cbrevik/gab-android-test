@@ -19,7 +19,7 @@ public class GoogleAnalyticsBridgePackage implements ReactPackage {
             ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
 
-        modules.add(new AdSupportAndroid(reactContext));
+        modules.add(new GoogleAnalyticsBridge(reactContext));
         return modules;
     }
 
