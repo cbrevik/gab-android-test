@@ -10,12 +10,5 @@
   "author": "Christian Brevik <christian@idehub.no> (http://idehub.no)",
   "peerDependencies": {
     "react-native": "*"
-  },
-  "keywords": [
-    "react",
-    "native",
-    "analytics",
-    "events",
-    "google"
-  ],
+  }
 }
