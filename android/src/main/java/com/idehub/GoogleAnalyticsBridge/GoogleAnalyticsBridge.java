@@ -27,11 +27,11 @@ public class GoogleAnalyticsBridge extends ReactContextBaseJavaModule{
         return "GoogleAnalyticsBridge";
     }
 
-    HashMap<string, Tracker> mTrackers = new HashMap<string, Tracker>();
+    HashMap<String, Tracker> mTrackers = new HashMap<String, Tracker>();
 
-    synchronized Tracker getTracker(string trackerId) {
+    synchronized Tracker getTracker(String trackerId) {
        if (!mTrackers.containsKey(trackerId)) {
-           GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+           GoogleAnalytics analytics = GoogleAnalytics.getInstance(getReactApplicationContext());
            Tracker t = analytics.newTracker(trackerId);
            t.setAnonymizeIp(true);
            mTrackers.put(trackerId, t);
@@ -46,14 +46,14 @@ public class GoogleAnalyticsBridge extends ReactContextBaseJavaModule{
     }
 
     @ReactMethod
-    public void trackEvent(string trackerId, string eventCategory, string eventAction, Callback callback){
+    public void trackEvent(String trackerId, String eventCategory, String eventAction, Callback callback){
         Tracker tracker = getTracker(trackerId);
-        bool tracked = false;
+        Boolean tracked = false;
         if (tracker != null)
         {
           tracker.send(new HitBuilders.EventBuilder()
-                .setCategory(getString(categoryId))
-                .setAction(getString(actionId))
+                .setCategory(eventCategory)
+                .setAction(eventAction)
                 .build());
           tracked = true;
         }
