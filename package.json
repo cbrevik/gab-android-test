@@ -1,0 +1,21 @@
+{
+  "name": "react-native-google-analytics-bridge-android",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/idehub/gab-android-test.git"
+  },
+  "version": "0.0.1",
+  "description": "Google Analytics Android",
+  "main": "index.js",
+  "author": "Christian Brevik <christian@idehub.no> (http://idehub.no)",
+  "peerDependencies": {
+    "react-native": "*"
+  },
+  "keywords": [
+    "react",
+    "native",
+    "analytics",
+    "events",
+    "google",
+  ]
+}
