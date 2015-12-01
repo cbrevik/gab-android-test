@@ -16,6 +16,6 @@
     "native",
     "analytics",
     "events",
-    "google",
-  ]
+    "google"
+  ],
 }
