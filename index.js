@@ -1,12 +1,7 @@
-var React, { GoogleAnalyticsBridge } = require('react-native');
+var GoogleAnalyticsBridge = require('react-native').NativeModules.GoogleAnalyticsBridge;
 
 module.exports = {
-  var _trackerId = null;
-  setTrackerId(trackerId) {
-    _trackerId = trackerId;
-  }
-
-  trackEvent(eventName, eventAction, cb) {
-    GoogleAnalyticsBridge.trackEvent(_trackerId, eventName, eventAction, cb);
+  trackEvent(trackerId, eventName, eventAction, cb) {
+    GoogleAnalyticsBridge.trackEvent(trackerId, eventName, eventAction, cb);
   }
 };
