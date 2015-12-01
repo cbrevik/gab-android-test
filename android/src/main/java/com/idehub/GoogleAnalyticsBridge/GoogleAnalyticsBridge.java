@@ -46,7 +46,7 @@ public class GoogleAnalyticsBridge extends ReactContextBaseJavaModule{
     }
 
     @ReactMethod
-    public void getAdvertisingId(string trackerId, string eventCategory, string eventAction, Callback callback){
+    public void trackEvent(string trackerId, string eventCategory, string eventAction, Callback callback){
         Tracker tracker = getTracker(trackerId);
         bool tracked = false;
         if (tracker != null)
